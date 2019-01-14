@@ -1,6 +1,6 @@
 {
   "name": "@power-cms/auth-service",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "PowerCms - Auth service",
   "repository": "https://github.com/power-cms/auth-service",
   "scripts": {
