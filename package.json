@@ -1,7 +1,7 @@
 {
   "name": "@power-cms/auth-service",
-  "version": "0.1.1",
-  "description": "PowerCms - Auth service",
+  "version": "0.2.0",
+  "description": "PowerCMS - Auth service",
   "repository": "https://github.com/power-cms/auth-service",
   "scripts": {
     "test": "jest --coverage --runInBand --forceExit --detectOpenHandles",
@@ -26,7 +26,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "@power-cms/common": "^0.5.1",
+    "@power-cms/common": "^0.6.0",
     "awilix": "^4.0.1",
     "bcrypt": "^3.0.2",
     "joi": "^14.3.0",

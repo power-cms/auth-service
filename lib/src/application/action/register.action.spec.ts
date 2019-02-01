@@ -39,7 +39,7 @@ describe('Register action', () => {
 
   it('Registers successfully', async () => {
     const action = container.resolve<RegisterAction>('registerAction');
-    const user: IUserView = await action.handle({ data: { ...properData, password: 'P@$$word' } });
+    const user: IUserView = await action.execute({ data: { ...properData, password: 'P@$$word' } });
 
     expect(user).toBeDefined();
     expect(user).not.toHaveProperty('password');
@@ -47,7 +47,7 @@ describe('Register action', () => {
 
   it('Catches invalid user', async () => {
     const action = container.resolve<RegisterAction>('registerAction');
-    const handler = action.handle({ data: { ...properData, username: 'NotExistingUser', password: 'P@$$word' } });
+    const handler = action.execute({ data: { ...properData, username: 'NotExistingUser', password: 'P@$$word' } });
 
     await expect(handler).rejects.toThrowError();
   });

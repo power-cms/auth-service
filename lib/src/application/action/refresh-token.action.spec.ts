@@ -44,7 +44,7 @@ describe('Refresh token action', () => {
 
   it('Refreshes token successfully', async () => {
     const action = container.resolve<RefreshTokenAction>('refreshTokenAction');
-    const tokens: TokensView = await action.handle({ data: properData });
+    const tokens: TokensView = await action.execute({ data: properData });
 
     const accessTokenPayload = Token.fromAccessTokenString(tokens.accessToken).getPayload();
     const refreshTokenPayload = Token.fromRefreshTokenString(tokens.refreshToken).getPayload();

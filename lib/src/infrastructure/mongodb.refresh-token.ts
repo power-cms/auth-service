@@ -20,7 +20,7 @@ export class MongodbRefreshToken implements IRefreshTokenRepository, IRefreshTok
       throw RefreshTokenNotFoundException.withGivenToken();
     }
 
-    return new RefreshTokenView(refreshToken._id, refreshToken.userId, refreshToken.token);
+    return new RefreshTokenView(refreshToken._id.toString(), refreshToken.userId, refreshToken.token);
   }
 
   public async create(refreshToken: RefreshToken): Promise<void> {

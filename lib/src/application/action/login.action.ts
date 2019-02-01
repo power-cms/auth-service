@@ -1,4 +1,4 @@
-import { ActionType, IActionData, IActionHandler, IRemoteProcedure } from '@power-cms/common/application';
+import { ActionType, BaseAction, IActionData, IRemoteProcedure } from '@power-cms/common/application';
 import { Id } from '@power-cms/common/domain';
 import { JoiObject } from 'joi';
 import { Credentials } from '../../domain/credentials';
@@ -14,7 +14,7 @@ interface ILoginData {
   password: string;
 }
 
-export class LoginAction implements IActionHandler {
+export class LoginAction extends BaseAction {
   public name: string = 'login';
   public type: ActionType = ActionType.CREATE;
   public validator: JoiObject = validator;
@@ -23,9 +23,11 @@ export class LoginAction implements IActionHandler {
     private credentialsQuery: ICredentialsQuery,
     private remoteProcedure: IRemoteProcedure,
     private createRefreshTokenHandler: CreateRefreshTokenCommandHandler
-  ) {}
+  ) {
+    super();
+  }
 
-  public async handle(action: IActionData): Promise<TokensView> {
+  public async perform(action: IActionData): Promise<TokensView> {
     try {
       const user = await this.remoteProcedure.call<IUserView>('user', 'getByLogin', action);
       const credentials = await this.credentialsQuery.getByUserId(user.id);

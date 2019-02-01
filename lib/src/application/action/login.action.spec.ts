@@ -44,12 +44,12 @@ describe('Login action', () => {
 
   beforeEach(async () => {
     (await container.resolve<Db>('db')).dropDatabase();
-    await container.resolve<RegisterAction>('registerAction').handle({ data: { ...userData, ...properData } });
+    await container.resolve<RegisterAction>('registerAction').execute({ data: { ...userData, ...properData } });
   });
 
   it('Loggs in successfully', async () => {
     const action = container.resolve<LoginAction>('loginAction');
-    const tokens: TokensView = await action.handle({ data: properData });
+    const tokens: TokensView = await action.execute({ data: properData });
 
     expect(tokens.accessToken).toBeDefined();
     expect(tokens.refreshToken).toBeDefined();
@@ -58,7 +58,7 @@ describe('Login action', () => {
 
   it('Catches bad credentials', async () => {
     const action = container.resolve<LoginAction>('loginAction');
-    const handler = action.handle({ data: { ...properData, password: 'Wrong password' } });
+    const handler = action.execute({ data: { ...properData, password: 'Wrong password' } });
 
     expect.assertions(1);
 
@@ -88,7 +88,7 @@ describe('Login action', () => {
 
   it('Catches not found user', async () => {
     const action = container.resolve<LoginAction>('loginAction');
-    const handler = action.handle({ data: { ...properData, login: 'NotExistingUser' } });
+    const handler = action.execute({ data: { ...properData, login: 'NotExistingUser' } });
 
     expect.assertions(1);
 

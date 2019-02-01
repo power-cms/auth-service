@@ -1,4 +1,4 @@
-import { ActionType, IActionData, IActionHandler } from '@power-cms/common/application';
+import { ActionType, BaseAction, IActionData } from '@power-cms/common/application';
 
 interface IRules {
   roles?: string[];
@@ -6,12 +6,12 @@ interface IRules {
   isOwner?: boolean;
 }
 
-export class AuthorizeAction implements IActionHandler {
+export class AuthorizeAction extends BaseAction {
   public name: string = 'authorize';
   public type: ActionType = ActionType.CREATE;
   public private: boolean = true;
 
-  public async handle(action: IActionData): Promise<boolean> {
+  public async perform(action: IActionData): Promise<boolean> {
     const rules: IRules = action.data.rules;
 
     if (rules.isAuthenticated && !this.isAuthenticated(action)) {

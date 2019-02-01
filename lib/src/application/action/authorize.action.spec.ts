@@ -27,7 +27,7 @@ describe('Authorize action', () => {
     };
 
     const action = container.resolve<AuthorizeAction>('authorizeAction');
-    const result = await action.handle({ auth, data });
+    const result = await action.execute({ auth, data });
 
     expect(result).toBe(true);
   });
@@ -40,7 +40,7 @@ describe('Authorize action', () => {
     };
 
     const action = container.resolve<AuthorizeAction>('authorizeAction');
-    const result = await action.handle({ data });
+    const result = await action.execute({ data });
 
     expect(result).toBe(false);
   });
@@ -60,7 +60,7 @@ describe('Authorize action', () => {
     };
 
     const action = container.resolve<AuthorizeAction>('authorizeAction');
-    const result = await action.handle({ auth, data });
+    const result = await action.execute({ auth, data });
 
     expect(result).toBe(false);
   });
@@ -76,7 +76,7 @@ describe('Authorize action', () => {
     };
 
     const action = container.resolve<AuthorizeAction>('authorizeAction');
-    const result = await action.handle({ data });
+    const result = await action.execute({ data });
 
     expect(result).toBe(false);
   });
@@ -93,7 +93,7 @@ describe('Authorize action', () => {
     };
 
     const action = container.resolve<AuthorizeAction>('authorizeAction');
-    const result = await action.handle({ auth, data });
+    const result = await action.execute({ auth, data });
 
     expect(result).toBe(false);
   });

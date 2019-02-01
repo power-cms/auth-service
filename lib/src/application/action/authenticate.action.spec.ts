@@ -21,18 +21,17 @@ describe('Authenticate action', () => {
     const token = Token.createAccessToken(userData).getToken();
 
     const action = container.resolve<AuthenticateAction>('authenticateAction');
-    const { iat, exp, ...user } = await action.handle({ data: { token } });
+    const { iat, exp, ...user } = await action.execute({ data: { token } });
 
     expect(user).toEqual(userData);
   });
 
-  // it('Catches invalid sign', async () => {
-  //   process.env.ACCESS_TOKEN_SECRET = 'FAKE SECRET';
-  //   const token = Token.createAccessToken(userData).getToken();
+  it('Throws error on fake token', async () => {
+    const action = container.resolve<AuthenticateAction>('authenticateAction');
+    const handler = action.execute({ data: { token: 'test' } });
 
-  //   const action = container.resolve<AuthenticateAction>('authenticateAction');
-  //   const handler = action.handle({data: {token}});
+    expect.assertions(1);
 
-  //   expect(handler).rejects.toThrowError();
-  // });
+    await expect(handler).rejects.toThrowError();
+  });
 });

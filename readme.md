@@ -1,5 +1,8 @@
-# :rocket: PowerCms - Auth service
+![PowerCms](docs/logo-small.png)
 
+# PowerCMS - Auth service
+
+[![NPM Version](https://img.shields.io/npm/v/@power-cms/auth-service.svg)](https://www.npmjs.com/package/@power-cms/auth-service)
 [![Build Status](https://travis-ci.com/power-cms/auth-service.svg?branch=master)](https://travis-ci.com/power-cms/auth-service)
 [![Coverage Status](https://coveralls.io/repos/github/power-cms/auth-service/badge.svg)](https://coveralls.io/github/power-cms/auth-service)
 

@@ -1,5 +1,17 @@
-import { IActionHandler, IContainer, ILogger, IRemoteProcedure, IService } from '@power-cms/common/application';
-import { createDatabaseConnection, NullLogger, NullRemoteProcedure } from '@power-cms/common/infrastructure';
+import {
+  CommandHandlerLogger,
+  IActionHandler,
+  IContainer,
+  ILogger,
+  IRemoteProcedure,
+  IService,
+} from '@power-cms/common/application';
+import {
+  createDatabaseConnection,
+  getDecorator,
+  NullLogger,
+  NullRemoteProcedure,
+} from '@power-cms/common/infrastructure';
 import * as awilix from 'awilix';
 import { Db } from 'mongodb';
 import { AuthenticateAction } from '../application/action/authenticate.action';
@@ -23,30 +35,32 @@ export const createContainer = (logger?: ILogger, remoteProcedure?: IRemoteProce
     injectionMode: awilix.InjectionMode.CLASSIC,
   });
 
+  const decorator = getDecorator(container);
+
   container.register({
     logger: awilix.asValue<ILogger>(logger || new NullLogger()),
     remoteProcedure: awilix.asValue<IRemoteProcedure>(remoteProcedure || new NullRemoteProcedure()),
 
     db: awilix.asValue<Promise<Db>>(createDatabaseConnection()),
 
-    credentialsRepository: awilix.asClass<ICredentialsRepository>(MongodbCredentials),
-    credentialsQuery: awilix.asClass<ICredentialsQuery>(MongodbCredentials),
+    credentialsRepository: awilix.asClass<ICredentialsRepository>(MongodbCredentials).singleton(),
+    credentialsQuery: awilix.asClass<ICredentialsQuery>(MongodbCredentials).singleton(),
 
-    refreshTokenRepository: awilix.asClass<IRefreshTokenRepository>(MongodbRefreshToken),
-    refreshTokenQuery: awilix.asClass<IRefreshTokenQuery>(MongodbRefreshToken),
+    refreshTokenRepository: awilix.asClass<IRefreshTokenRepository>(MongodbRefreshToken).singleton(),
+    refreshTokenQuery: awilix.asClass<IRefreshTokenQuery>(MongodbRefreshToken).singleton(),
 
-    createCredentialsHandler: awilix.asClass<CreateCredentialsCommandHandler>(CreateCredentialsCommandHandler),
-    createRefreshTokenHandler: awilix.asClass<CreateRefreshTokenCommandHandler>(CreateRefreshTokenCommandHandler),
-    deleteRefreshTokenHandler: awilix.asClass<DeleteRefreshTokenCommandHandler>(DeleteRefreshTokenCommandHandler),
+    loginAction: awilix.asClass<LoginAction>(LoginAction).singleton(),
+    registerAction: awilix.asClass<RegisterAction>(RegisterAction).singleton(),
+    authenticateAction: awilix.asClass<AuthenticateAction>(AuthenticateAction).singleton(),
+    authorizeAction: awilix.asClass<AuthorizeAction>(AuthorizeAction).singleton(),
+    refreshTokenAction: awilix.asClass<RefreshTokenAction>(RefreshTokenAction).singleton(),
 
-    loginAction: awilix.asClass<LoginAction>(LoginAction),
-    registerAction: awilix.asClass<RegisterAction>(RegisterAction),
-    authenticateAction: awilix.asClass<AuthenticateAction>(AuthenticateAction),
-    authorizeAction: awilix.asClass<AuthorizeAction>(AuthorizeAction),
-    refreshTokenAction: awilix.asClass<RefreshTokenAction>(RefreshTokenAction),
-
-    service: awilix.asClass<IService>(AuthService),
+    service: awilix.asClass<IService>(AuthService).singleton(),
   });
+
+  decorator.decorate('createCredentialsHandler', CreateCredentialsCommandHandler, CommandHandlerLogger);
+  decorator.decorate('createRefreshTokenHandler', CreateRefreshTokenCommandHandler, CommandHandlerLogger);
+  decorator.decorate('deleteRefreshTokenHandler', DeleteRefreshTokenCommandHandler, CommandHandlerLogger);
 
   container.register({
     actions: awilix.asValue<IActionHandler[]>([

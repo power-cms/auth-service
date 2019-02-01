@@ -20,7 +20,7 @@ export class MongodbCredentials implements ICredentialsRepository, ICredentialsQ
       throw CredentialsNotFoundException.withGivenPassword();
     }
 
-    return new CredentialsView(credentials._id, credentials.userId, credentials.password);
+    return new CredentialsView(credentials._id.toString(), credentials.userId, credentials.password);
   }
 
   public async create(credentials: Credentials): Promise<void> {

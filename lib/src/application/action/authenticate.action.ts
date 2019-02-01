@@ -1,17 +1,12 @@
-import { ActionType, IActionData, IActionHandler } from '@power-cms/common/application';
+import { ActionType, BaseAction, IActionData } from '@power-cms/common/application';
 import { Token } from '../../domain/token';
 
-export class AuthenticateAction implements IActionHandler {
+export class AuthenticateAction extends BaseAction {
   public name: string = 'authenticate';
   public type: ActionType = ActionType.CREATE;
   public private: boolean = true;
 
-  public async handle(action: IActionData): Promise<any> {
-    try {
-      return Token.fromAccessTokenString(String(action.data.token)).getPayload();
-    } catch (e) {
-      // todo: throw proper exception
-      throw e;
-    }
+  public async perform(action: IActionData): Promise<any> {
+    return Token.fromAccessTokenString(String(action.data.token)).getPayload();
   }
 }
